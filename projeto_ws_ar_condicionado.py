@@ -3,6 +3,7 @@ import requests
 import re
 import csv
 import datetime
+import os   
 
 #variables__
 palavra_chave = 'const'
@@ -15,18 +16,19 @@ nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/fechadura-eletronica-digital-intelbras-com-senha-fr101-sobrepor-para-porta-de-giwaz\  aszxsro_89663861"
+url = "https://www.leroymerlin.com.br/kit-200-abracadeiras-nylon-3,6x150mm-preto-pacote-kala_1567337335"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
 
 #data_get___
-prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code')
+prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
 
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text')
+prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text
 
 prod_price = soup.find('div', class_=re.compile('product-price-tag'))
-prod_price.prettify()
+
+#==== A PARTIR DAQUI MODIFICR O PROD_PRICE PRA DIMINUIR A QUANTIDADE DE CARACTERES====
 
 #Write_archive__
 with open(nome_arquivo, 'w', newline='') as arquivo:
@@ -42,6 +44,9 @@ with open(nome_arquivo, 'r') as file:
     for row in reader:
         linhas_texto = linhas_texto + ','.join(row) + '\n'
 
+#remove_archive__
+os.remove(nome_arquivo)
+
 #find_price__
 for linha in linhas_texto.split('\n'):
     if palavra_chave in linha:
@@ -55,6 +60,9 @@ for linha in linhas_texto.split('\n'):
 
 #print_price__
 valores_str =','.join(valores)
+
+print(prod_barcode)
+print(prod_title)
 print(valores_str)
 #ctrl + ';' comenta a linha 
 
