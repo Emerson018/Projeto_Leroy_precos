@@ -26,7 +26,7 @@ prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code'
 
 prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text
 
-prod_price = soup.find('div', class_=re.compile('product-price-tag'))
+prod_price = soup.find('div', class_= 'product-price-tag')
 
 #==== A PARTIR DAQUI MODIFICR O PROD_PRICE PRA DIMINUIR A QUANTIDADE DE CARACTERES====
 
