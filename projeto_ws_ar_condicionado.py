@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup
+import pandas as pd
 import requests
 import re
 import csv
 import datetime
-import os   
+import os
 
 #variables__
 palavra_chave = 'const'
@@ -35,8 +36,6 @@ with open(nome_arquivo, 'w', newline='') as arquivo:
     writer = csv.writer(arquivo)
     writer.writerows(prod_price)
 
-print(f"Arquivo criado: {nome_arquivo}")
-
 #Read_archive__
 with open(nome_arquivo, 'r') as file:
     reader = csv.reader(file)
@@ -61,11 +60,22 @@ for linha in linhas_texto.split('\n'):
 #print_price__
 valores_str =','.join(valores)
 
-print(prod_barcode)
+product = {'LM': [prod_barcode],
+        'Title': [prod_title],
+        'Price': [valores_str]}
+
+dados = pd.DataFrame(product)
+dados.to_csv('produto.csv', index= False, encoding='utf-8', sep=';')
+
+print(f"Arquivo criado: {nome_arquivo}")
+
+'''
+todos sao do tipo STR
+print(prod_barcode) 
 print(prod_title)
 print(valores_str)
 #ctrl + ';' comenta a linha 
-
+'''
 '''
 ===basico===
 >>> limpar o arquivo csv antes de salvá-lo, tirando espaços em branco(.strip) e removendo linhas que não serão usadas.
