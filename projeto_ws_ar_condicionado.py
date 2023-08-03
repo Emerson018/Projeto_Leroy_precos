@@ -74,15 +74,18 @@ todos sao do tipo STR
 print(prod_barcode) 
 print(prod_title)
 print(valores_str)
-#ctrl + ';' comenta a linha 
+#ctrl + ';' comenta a linha
+#com o with open n precisa fechar o arquivo 
 '''
 '''
 ===basico===
 >>> limpar o arquivo csv antes de salvá-lo, tirando espaços em branco(.strip) e removendo linhas que não serão usadas.
 >>> Organizar ele com o chat gpt mostrou.
 >>> tentar adicionar FUNÇÕES.
+>>> pra rodar sem precisar abrir um script: https://www.youtube.com/watch?v=PXMJ6FS7llk&ab_channel=freeCodeCamp.org == 1:12:00
 
 ===avançado===
->>> criar um banco de dados com os links dos ar condicionados. salsd
+>>> criar um banco de dados com os links dos ar condicionados. OU
+>>> Criar um arquivo .txt com append e depois salvar ele em CSV, caso n funcione salvar direto em csv
 >>> fazer com q a o banco de dados mostre os preços que alteraram com o tempo.
 '''
