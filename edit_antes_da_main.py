@@ -6,6 +6,14 @@ import csv
 import datetime
 import os
 
+#functions__
+
+def verifica_preco():
+    if preco_antigo != preco_atual:
+        print('Houve uma alterção no preço!')
+    else:
+        print('O preço continua o mesmo.')
+
 #variables__
 palavra_chave = 'const'
 contador = 0
@@ -29,11 +37,9 @@ prod_title = soup.find('h1', class_ = 'product-title align-left color-text').tex
 
 prod_price = soup.find('div', class_= 'product-price-tag')
 
-#==== A PARTIR DAQUI MODIFICR O PROD_PRICE PRA DIMINUIR A QUANTIDADE DE CARACTERES====
-
 #Write_archive__
-with open(nome_arquivo, 'w', newline='') as arquivo:
-    writer = csv.writer(arquivo)
+with open(nome_arquivo, 'w', newline='') as file:
+    writer = csv.writer(file)
     writer.writerows(prod_price)
 
 #Read_archive__
@@ -41,7 +47,7 @@ with open(nome_arquivo, 'r') as file:
     reader = csv.reader(file)
 
     for row in reader:
-        linhas_texto = linhas_texto + ','.join(row) + '\n'
+        linhas_texto = linhas_texto + '.'.join(row) + '\n'
 
 #remove_archive__
 os.remove(nome_arquivo)
@@ -58,34 +64,25 @@ for linha in linhas_texto.split('\n'):
                 break
 
 #print_price__
-price =','.join(valores)
+
+
+preco_atual =float(','.join(valores).replace(",", "."))
+preco_antigo =str(','.join(valores).replace(",", "."))
+
+with open(nome_arquivo, 'w') as file:
+    writer = csv.writer(file)
+    writer.writerows(preco_antigo)
+
+with open(nome_arquivo, 'r') as file:
+    preco_salvo = file.read().strip()
+  
 
 product = {'LM': [prod_barcode],
         'Title': [prod_title],
-        'Price': [price]}
+        'Price': [preco_atual]}
 
-dados = pd.DataFrame(product)
-dados.to_csv('produto.csv', index= False, encoding='utf-8', sep=';')
-
-print(f"Arquivo criado: {nome_arquivo}")
-
-'''
-todos sao do tipo STR
 print(prod_barcode) 
 print(prod_title)
-print(valores_str)
-#ctrl + ';' comenta a linha
-#com o with open n precisa fechar o arquivo 
-'''
-'''
-===basico===
->>> limpar o arquivo csv antes de salvá-lo, tirando espaços em branco(.strip) e removendo linhas que não serão usadas.
->>> Organizar ele com o chat gpt mostrou.
->>> tentar adicionar FUNÇÕES.
->>> pra rodar sem precisar abrir um script: https://www.youtube.com/watch?v=PXMJ6FS7llk&ab_channel=freeCodeCamp.org == 1:12:00
-
-===avançado===
->>> criar um banco de dados com os links dos ar condicionados. OU
->>> Criar um arquivo .txt com append e depois salvar ele em CSV, caso n funcione salvar direto em csv
->>> fazer com q a o banco de dados mostre os preços que alteraram com o tempo.
-'''
+print(preco_atual)
+verifica_preco()
+print(preco_salvo)
