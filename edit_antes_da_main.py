@@ -7,9 +7,8 @@ import datetime
 import os
 
 #functions__
-
 def verifica_preco():
-    if preco_antigo != preco_atual:
+    if preco_salvo != preco_atual:
         print('Houve uma alterção no preço!')
     else:
         print('O preço continua o mesmo.')
@@ -19,19 +18,32 @@ palavra_chave = 'const'
 contador = 0
 valores = []
 linhas_texto = ''
-padrao = r'\d+'
+ean_13 = ''
+padrao = r'\d+\.\d{3}|\d.\d{2}'
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
+valores2 = []
+linhas_texto2 = ''
+padrao2 = r'.\d{2}'
+contador2 = 2
+palavra_chave2 = 'const'
+
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/kit-200-abracadeiras-nylon-3,6x150mm-preto-pacote-kala_1567337335"
+url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
 
 #data_get___
 prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
+
+#+++++encontra apenas os valores do lm ou do cod. barra+++++++
+for caractere in prod_barcode:
+    if caractere.isdigit():
+        ean_13 += caractere
+#=====================
 
 prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text
 
@@ -59,30 +71,48 @@ for linha in linhas_texto.split('\n'):
         if match:
             preco = match.group()
             valores.append(preco)
-            contador += 1
+            contador += 2
             if contador >=2:
                 break
 
-#print_price__
+#centavo
+for linha in linhas_texto.split('\n'):
+    if palavra_chave in linha:
+        match = re.search(padrao2, linha)
+        if match:
+            preco = match.group()
+            valores2.append(preco)
+            contador2 += 1
+            if contador2 >=4:
+                centavosss = float(valores2[1])
+                break
 
+centavo = valores2
 
+#print_price__ 
 preco_atual =float(','.join(valores).replace(",", "."))
 preco_antigo =str(','.join(valores).replace(",", "."))
 
-with open(nome_arquivo, 'w') as file:
+
+with open(nome_arquivo, 'w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerows(preco_antigo)
+    writer.writerow([preco_antigo])
 
 with open(nome_arquivo, 'r') as file:
     preco_salvo = file.read().strip()
+    #preco_salvo = float(preco_salvo)
+
+os.remove(nome_arquivo)
   
 
-product = {'LM': [prod_barcode],
+product = {'LM': [ean_13],
         'Title': [prod_title],
         'Price': [preco_atual]}
 
-print(prod_barcode) 
+print(ean_13) 
 print(prod_title)
-print(preco_atual)
+print(f'preco atual: {preco_atual}')
+print(f'preco antigo: {preco_salvo}')
 verifica_preco()
-print(preco_salvo)
+print(centavosss)
+print(preco_atual, centavosss)

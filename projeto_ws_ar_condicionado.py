@@ -11,21 +11,25 @@ palavra_chave = 'const'
 contador = 0
 valores = []
 linhas_texto = ''
-padrao = r'\d+'
+ean_13 = ''
+padrao = r'\d+\.\d{3}|\d,\d{2}'
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/kit-200-abracadeiras-nylon-3,6x150mm-preto-pacote-kala_1567337335"
+url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
 
 #data_get___
 prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
+for caractere in prod_barcode:
+    if caractere.isdigit():
+        ean_13 += caractere
 
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text
+prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.strip()
 
 prod_price = soup.find('div', class_= 'product-price-tag')
 
@@ -44,7 +48,7 @@ with open(nome_arquivo, 'r') as file:
         linhas_texto = linhas_texto + ','.join(row) + '\n'
 
 #remove_archive__
-os.remove(nome_arquivo)
+#os.remove(nome_arquivo)
 
 #find_price__
 for linha in linhas_texto.split('\n'):
@@ -54,21 +58,21 @@ for linha in linhas_texto.split('\n'):
             preco = match.group()
             valores.append(preco)
             contador += 1
-            if contador >=2:
+            if contador >=1:
                 break
 
 #print_price__
 price =','.join(valores)
 
-product = {'LM': [prod_barcode],
+product = {'LM': [ean_13],
         'Title': [prod_title],
         'Price': [price]}
 
 dados = pd.DataFrame(product)
 dados.to_csv('produto.csv', index= False, encoding='utf-8', sep=';')
 
-print(f"Arquivo criado: {nome_arquivo}")
-
+print("Arquivo criado!!!")
+print(price)
 '''
 todos sao do tipo STR
 print(prod_barcode) 
@@ -88,4 +92,5 @@ print(valores_str)
 >>> criar um banco de dados com os links dos ar condicionados. OU
 >>> Criar um arquivo .txt com append e depois salvar ele em CSV, caso n funcione salvar direto em csv
 >>> fazer com q a o banco de dados mostre os preços que alteraram com o tempo.
+>>> fazer com q ele logue em POA e REGIAo
 '''
