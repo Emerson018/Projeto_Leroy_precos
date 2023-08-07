@@ -48,7 +48,7 @@ with open(nome_arquivo, 'r') as file:
         linhas_texto = linhas_texto + ','.join(row) + '\n'
 
 #remove_archive__
-#os.remove(nome_arquivo)
+os.remove(nome_arquivo)
 
 #find_price__
 for linha in linhas_texto.split('\n'):

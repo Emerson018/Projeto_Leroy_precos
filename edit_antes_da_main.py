@@ -45,7 +45,7 @@ for caractere in prod_barcode:
         ean_13 += caractere
 #=====================
 
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text
+prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
 
 prod_price = soup.find('div', class_= 'product-price-tag')
 
@@ -82,16 +82,16 @@ for linha in linhas_texto.split('\n'):
         if match:
             preco = match.group()
             valores2.append(preco)
-            contador2 += 1
-            if contador2 >=4:
-                centavosss = float(valores2[1])
+            contador += 1
+            if contador >=4:
+                centavos = valores2[1]
                 break
 
-centavo = valores2
-
 #print_price__ 
-preco_atual =float(','.join(valores).replace(",", "."))
-preco_antigo =str(','.join(valores).replace(",", "."))
+preco_atual =','.join(valores)
+preco_atual = preco_atual + centavos.replace('.', ',')
+preco_antigo =','.join(valores)
+preco_antigo = preco_antigo + centavos.replace('.',',')
 
 
 with open(nome_arquivo, 'w', newline='') as file:
@@ -100,19 +100,20 @@ with open(nome_arquivo, 'w', newline='') as file:
 
 with open(nome_arquivo, 'r') as file:
     preco_salvo = file.read().strip()
-    #preco_salvo = float(preco_salvo)
+    preco_salvo = (preco_salvo)
 
 os.remove(nome_arquivo)
-  
 
 product = {'LM': [ean_13],
         'Title': [prod_title],
         'Price': [preco_atual]}
 
-print(ean_13) 
-print(prod_title)
-print(f'preco atual: {preco_atual}')
-print(f'preco antigo: {preco_salvo}')
+dados = pd.DataFrame(product)
+dados.to_csv('teste.csv', index= False, encoding= 'utf-8', sep= ';')
+  
+print(f'Código: {ean_13}\n'
+       f'Título: {prod_title}\n'
+       f'Preco atual: {preco_atual}\n'
+       f'Preco antigo: {preco_salvo}')
+
 verifica_preco()
-print(centavosss)
-print(preco_atual, centavosss)
