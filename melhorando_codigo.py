@@ -5,6 +5,7 @@ import re
 import csv
 import datetime
 import os
+from openpyxl import load_workbook
 
 #functions__
 def verifica_preco(preco_salvo, preco_atual):
@@ -103,6 +104,7 @@ product = {'LM': [ean_13],
 dados = pd.DataFrame(product)
 dados.to_csv('produto.csv', index= False, encoding= 'utf-8', sep= ';')
 
+
 #show_code__
 print(f'Código: {ean_13}\n'
        f'Título: {prod_title}\n'
@@ -110,23 +112,3 @@ print(f'Código: {ean_13}\n'
        f'Preco antigo: {preco_salvo}')
 
 verifica_preco(preco_atual, preco_salvo)
-'''
-todos sao do tipo STR
-print(prod_barcode) 
-print(prod_title)
-print(valores_str)
-#ctrl + ';' comenta a linha
-#com o with open n precisa fechar o arquivo 
-'''
-'''
-===basico===
->>> Organizar ele com o chat gpt mostrou.
->>> tentar adicionar FUNÇÕES.
->>> pra rodar sem precisar abrir um script: https://www.youtube.com/watch?v=PXMJ6FS7llk&ab_channel=freeCodeCamp.org == 1:12:00
-
-===avançado===
->>> criar um banco de dados com os links dos ar condicionados. OU
->>> Criar um arquivo .txt com append e depois salvar ele em CSV, caso n funcione salvar direto em csv
->>> fazer com q a o banco de dados mostre os preços que alteraram com o tempo.
->>> fazer com q ele logue em POA e REGIAo
-'''
