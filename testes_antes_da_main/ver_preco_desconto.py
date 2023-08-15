@@ -5,43 +5,32 @@ import re
 import csv
 import datetime
 import os
-from openpyxl import load_workbook
 
-#functions__
-def verifica_preco(preco_salvo, preco_atual):
-    if preco_salvo != preco_atual:
-        print('Houve uma alterção no preço!')
-    else:
-        print('O preço continua o mesmo.')
-
-#variables__
 palavra_chave = 'const'
 contador = 0
 valor_real = []
 valor_centavo = []
 linhas_texto = ''
-ean_13 = ''
 padrao_real = r'\d+\.\d{3}|\d.\d{2}'
 padrao_centavo = r'.\d{2}'
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
+nome_arquivo2 = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/kit-vaso-sanitario-convencional-com-assento-branco-saida-vertical-gap-roca_91069615"
+url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
 
 #data_get___
-prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
-for caractere in prod_barcode:
-    if caractere.isdigit():
-        ean_13 += caractere
 
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
+desconto = soup.find('div', class_= 'promotional')
+#desconto = discount.prettify()
 
-prod_price = soup.find('div', class_= 'product-price-tag')
+prod_price = soup.find('span', 'oferta')
+
 
 #Write_archive__
 with open(nome_arquivo, 'w', newline='') as file:
@@ -97,18 +86,15 @@ with open(nome_arquivo, 'r') as file:
 
 os.remove(nome_arquivo)
 
-product = {'LM': [ean_13],
-        'Title': [prod_title],
+product = {
         'Price': [preco_atual]}
 
 dados = pd.DataFrame(product)
 dados.to_csv('produto.csv', index= False, encoding= 'utf-8', sep= ';')
 
 
-#show_code__
-print(f'Código: {ean_13}\n'
-       f'Título: {prod_title}\n'
-       f'Preco atual: {preco_atual}\n'
-       f'Preco antigo: {preco_salvo}')
 
-verifica_preco(preco_atual, preco_salvo)
+
+#show_code
+print(preco_atual)
+print(desconto)

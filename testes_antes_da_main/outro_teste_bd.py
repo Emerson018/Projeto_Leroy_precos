@@ -1,36 +1,35 @@
-#esse código funcionou para excel (xlsx)
 
 import pandas as pd
-
-csv_file = 'produto.csv'
-excel_file = 'novos_produtos.csv'
-try:
-    df = pd.read_csv(csv_file)
-
-    df.to_excel(excel_file, index= None)
-
-    print('Arquivo convertido.')
-
-except FileNotFoundError:
-    print('arquivo csv não encontrado!!')
-
-
-product = {'LM': ['984470914'],
-        'Title': ['Emerson'],
-        'Price': ['9999.99']}
+product = {'LM': [55555],
+        'Title': ['casa'],
+        'Price': ['99.99']}
 
 dados = pd.DataFrame(product)
 
-df1 = pd.read_excel('novos_produtos.xlsx')
-with pd.ExcelWriter(
-                    'testes.xlsx',
-                    mode='a',
-                    engine= 'openpyxl',
-                     if_sheet_exists='overlay') as writer:
-    dados.to_excel(
+df1 = pd.read_excel('teste.xlsx')
+existing_lm_values = df1['LM'].dropna().tolist()
+
+new_lm_values = dados['LM'].tolist()
+values_to_add = [lm for lm in new_lm_values if lm not in existing_lm_values]
+
+if values_to_add:
+    dados_to_add = dados[dados['LM'].isin(values_to_add)]
+    with pd.ExcelWriter(
+                        'teste.xlsx',
+                        mode='a',
+                        engine= 'openpyxl',
+                        if_sheet_exists='overlay') as writer:
+        dados_to_add.to_excel(
                     writer,
-                sheet_name='Sheet1',
-                header= None,
-                startrow=writer.sheets['Sheet1'].max_row,
-                index=False)
-#mostra o valor especifico do dataframe
+                    sheet_name='Plan1',
+                    header= None,
+                    startrow=writer.sheets['Plan1'].max_row,
+                    index=False)
+    print('valores adicionados com sucesso!')
+else:
+    print('Valor já existente na planilha!')
+
+#se for excluir o excel, lembrar de colocar o index
+#voltou a funcionar. se falhar, olha o diretorio e dá CD
+
+
