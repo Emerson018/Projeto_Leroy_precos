@@ -26,9 +26,12 @@ padrao_centavo = r'.\d{2}'
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
+
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/kit-vaso-sanitario-convencional-com-assento-branco-saida-vertical-gap-roca_91069615"
+
+url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
+
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
@@ -59,15 +62,17 @@ with open(nome_arquivo, 'r') as file:
 os.remove(nome_arquivo)
 
 #find_real__
-for linha in linhas_texto.split('\n'):
-    if palavra_chave in linha:
-        match = re.search(padrao_real, linha)
-        if match:
-            preco = match.group()
-            valor_real.append(preco)
-            contador += 2
-            if contador >=2:
-                break
+def find_real(valor_real, linhas_texto):
+    for linha in linhas_texto.split('\n'):
+        if palavra_chave in linha:
+            match = re.search(padrao_real, linha)
+            if match:
+                preco = match.group()
+                valor_real.append(preco)
+                contador += 2
+                if contador >=2:
+                    break
+    return valor_real
 
 #find_centavo__
 for linha in linhas_texto.split('\n'):
@@ -81,7 +86,8 @@ for linha in linhas_texto.split('\n'):
                 centavos = valor_centavo[1]
                 break
 
-#adjust_price__ 
+#adjust_price__
+find_real()
 preco_atual =','.join(valor_real)
 preco_atual = (preco_atual + centavos).replace('.', ',')
 preco_antigo =','.join(valor_real)
