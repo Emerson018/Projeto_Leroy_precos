@@ -15,11 +15,10 @@ padrao_real = r'\d+\.\d{3}|\d.\d{2}'
 padrao_centavo = r'.\d{2}'
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
-nome_arquivo2 = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
+url = "https://www.leroymerlin.com.br/lixeira-seletiva-50l-metal-inox-pedal-prata-delinia_91949284?region=outros&gclid=Cj0KCQjwoeemBhCfARIsADR2QCtNEj9pl-TopsTRU8mo8hcwO7bfGcYr_pAsoaZ5v1-HjwkqGU186CAaAsTzEALw_wcB"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
@@ -29,8 +28,8 @@ soup = BeautifulSoup(html_content, "html.parser")
 desconto = soup.find('div', class_= 'promotional')
 #desconto = discount.prettify()
 
-prod_price = soup.find('span', 'oferta')
-
+prod_price = soup.find('div', class_= 'product-price-tag')
+precinho = prod_price.prettify()
 
 #Write_archive__
 with open(nome_arquivo, 'w', newline='') as file:
@@ -45,7 +44,6 @@ with open(nome_arquivo, 'r') as file:
         linhas_texto = linhas_texto + '.'.join(row) + '\n'
 
 #remove_archive__
-os.remove(nome_arquivo)
 
 #find_real__
 for linha in linhas_texto.split('\n'):
@@ -92,9 +90,5 @@ product = {
 dados = pd.DataFrame(product)
 dados.to_csv('produto.csv', index= False, encoding= 'utf-8', sep= ';')
 
-
-
-
 #show_code
 print(preco_atual)
-print(desconto)

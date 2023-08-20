@@ -1,4 +1,3 @@
-
 import pandas as pd
 product = {'LM': [55555],
         'Title': ['casa'],
@@ -21,15 +20,12 @@ if values_to_add:
                         if_sheet_exists='overlay') as writer:
         dados_to_add.to_excel(
                     writer,
-                    sheet_name='Plan1',
+                    sheet_name='Sheet1',
                     header= None,
-                    startrow=writer.sheets['Plan1'].max_row,
+                    startrow=writer.sheets['Sheet1'].max_row,
                     index=False)
     print('valores adicionados com sucesso!')
 else:
     print('Valor já existente na planilha!')
 
-#se for excluir o excel, lembrar de colocar o index
-#voltou a funcionar. se falhar, olha o diretorio e dá CD
-
-
+    #AQUI TÁ DANDO UM APPEN AOS VALORES NA PLANILHA, EM CADA LINHA E COLUNA
