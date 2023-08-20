@@ -7,11 +7,31 @@ import datetime
 import os
 
 #functions__
-def verifica_preco(preco_salvo, preco_atual):
-    if preco_salvo != preco_atual:
-        print('Houve uma alterção no preço!')
-    else:
-        print('O preço continua o mesmo.')
+
+def add_values(dados):
+    dados = pd.DataFrame(product)
+
+    df1 = pd.read_excel('teste.xlsx')
+    existing_lm_values = df1['LM'].dropna().tolist()
+
+    new_lm_values = dados['LM'].tolist()
+    values_to_add = [lm for lm in new_lm_values if lm not in existing_lm_values]
+
+    if values_to_add:
+        dados_to_add = dados[dados['LM'].isin(values_to_add)]
+        with pd.ExcelWriter(
+                            'teste.xlsx',
+                            mode='a',
+                            engine= 'openpyxl',
+                            if_sheet_exists='overlay') as writer:
+            dados_to_add.to_excel(
+                        writer,
+                        sheet_name='Sheet1',
+                        header= None,
+                        startrow=writer.sheets['Sheet1'].max_row,
+                        index=False)
+        print('valores adicionados com sucesso!')
+
 
 #variables__
 palavra_chave = 'const'
@@ -86,9 +106,28 @@ for linha in linhas_texto.split('\n'):
 #adjust_price__ 
 preco_atual =','.join(valores)
 preco_atual = (preco_atual + centavos).replace('.', ',')
-preco_antigo =','.join(valores)
-preco_antigo = (preco_antigo + centavos).replace('.',',')
 
+
+
+product = {'LM': [ean_13],
+        'Title': [prod_title],
+        'Price': [preco_atual]}
+
+
+
+print(f'Código: {ean_13}\n'
+       f'Título: {prod_title}\n'
+       f'Preco atual: {preco_atual}\n')
+
+
+
+add_values(product)
+
+
+
+'''
+
+tava usando para salvar preco antigo, depois ler para conferir se o preço batia
 with open(nome_arquivo, 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow([preco_antigo])
@@ -96,18 +135,27 @@ with open(nome_arquivo, 'w', newline='') as file:
 with open(nome_arquivo, 'r') as file:
     preco_salvo = file.read().strip().replace('"','')
 
-#os.remove(nome_arquivo)
+os.remove(nome_arquivo)
 
-product = {'LM': [ean_13],
-        'Title': [prod_title],
-        'Price': [preco_atual]}
 
-dados = pd.DataFrame(product)
-dados.to_csv('teste.csv', index= False, encoding= 'utf-8', sep= ';')
+===========
+def verifica_preco(preco_salvo, preco_atual):
+    if preco_salvo != preco_atual:
+        print('Houve uma alterção no preço!')
+    else:
+        print('O preço continua o mesmo.')
 
-print(f'Código: {ean_13}\n'
-       f'Título: {prod_title}\n'
-       f'Preco atual: {preco_atual}\n'
-       f'Preco antigo: {preco_salvo}')
 
-verifica_preco(preco_atual, preco_salvo)
+preco_antigo =','.join(valores)
+preco_antigo = (preco_antigo + centavos).replace('.',',')
+
+
+f'Preco antigo: {preco_antigo}'
+
+verifica_preco(preco_atual, preco_antigo)
+
+
+
+
+
+'''
