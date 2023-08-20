@@ -32,16 +32,47 @@ def add_values(dados):
                         index=False)
         print('valores adicionados com sucesso!')
 
+def real(text_lines):
+    key_word = 'const'
+    default = r'\d+\.\d{3}|\d.\d{2}'
+    values = []
+    counter = 0
+
+    for line in text_lines.split('\n'):
+        if key_word in line:
+            match = re.search(default, line)
+            if match:
+                price = match.group()
+                values.append(price)
+                counter +=2
+                if counter >=2:
+                    break
+
+    price_now =','.join(values)
+    return price_now
+
+def cents(text_lines):
+    key_word = 'const'
+    default = r'.\d{2}'
+    values = []
+    counter = 0
+
+    for line in text_lines.split('\n'):
+        if key_word in line:
+            match = re.search(default, line)
+            if match:
+                price = match.group()
+                values.append(price)
+                counter +=1
+                if counter >=4:
+                    cents_value = values[1]
+                    break
+    
+    return cents_value
 
 #variables__
-palavra_chave = 'const'
-contador = 0
-valores = []
-valores2 = []
-linhas_texto = ''
 ean_13 = ''
-padrao = r'\d+\.\d{3}|\d.\d{2}'
-padrao2 = r'.\d{2}'
+linhas_texto = ''
 data_hora = datetime.datetime.now()
 nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
@@ -80,48 +111,27 @@ with open(nome_arquivo, 'r') as file:
 #remove_archive__
 os.remove(nome_arquivo)
 
-#find_real__
-for linha in linhas_texto.split('\n'):
-    if palavra_chave in linha:
-        match = re.search(padrao, linha)
-        if match:
-            preco = match.group()
-            valores.append(preco)
-            contador += 2
-            if contador >=2:
-                break
-
-#centavo
-for linha in linhas_texto.split('\n'):
-    if palavra_chave in linha:
-        match = re.search(padrao2, linha)
-        if match:
-            preco = match.group()
-            valores2.append(preco)
-            contador += 1
-            if contador >=4:
-                centavos = valores2[1]
-                break
+#call_functions__
+reais = real(linhas_texto)
+centavos = cents(linhas_texto)
 
 #adjust_price__ 
-preco_atual =','.join(valores)
-preco_atual = (preco_atual + centavos).replace('.', ',')
+reais = (reais + centavos).replace('.', ',')
 
-
-
+#create dict__
 product = {'LM': [ean_13],
         'Title': [prod_title],
-        'Price': [preco_atual]}
-
-
-
-print(f'Código: {ean_13}\n'
-       f'Título: {prod_title}\n'
-       f'Preco atual: {preco_atual}\n')
-
-
+        'Price': [reais]}
 
 add_values(product)
+
+print(
+    'Os seguintes valores foram adicionados:\n\n'
+    f'Código: {ean_13}\n'
+    f'Título: {prod_title}\n'
+    f'Preco atual: {reais}\n')
+
+
 
 
 

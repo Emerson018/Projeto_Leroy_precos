@@ -1,0 +1,131 @@
+"
+"
+"
+","<div class=""shell-loader price-tag-border-top""></div>","
+","<div class=""shell-loader price-tag-to-price""></div>","
+","<div class=""shell-loader price-tag-installments""></div>","
+","<div class=""shell-loader price-tag-sold-by""></div>","
+"
+"
+"
+"
+","<a class=""payment-trigger color-primary text-underline"" data-payment-methods-="""" data-seller-link="""" href=""#"" leroy="""">
+<strong>
+Formas de pagamento
+</strong>
+</a>","
+"
+"
+"
+"
+ 
+"
+"
+"
+"
+","<div>
+<button class=""ecommerce-button purchase-button"" data-button=""ecommerce"" data-component=""add-to-cart tooltip"" data-override-product-quantity=""false"" data-product-code=""91697550"" data-shop-offer-id="""" data-tooltip="".tooltip"" disabled="""">
+<span>Comprar e receber</span>
+<div class=""tooltip align-center"" data-tooltip-message="""" x-placement=""top"">
+Produto indisponível para comprar pelo Site. Consulte o estoque das Lojas.
+</div>
+</button>
+</div>","
+","<span class=""purchase-buttons-option"">ou</span>","
+","<script type=""e714ff8a52e381521d174786-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '3.949'.replace('.', '')
+  const price = integers + '.90'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ar condicionado Split 24000 BTUs Quente e Frio 220V Series A1 TCL',
+          'id': '91697550',
+          'price': price,
+          'brand': 'TCL',
+          'category': 'climatizacao-e-ventilacao/ar-condicionado',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+","<div>
+<button class=""pickup-in-store-button purchase-button"" data-button=""pickupInStore"" data-component=""stock-checker tooltip"" data-lm=""91697550"" data-pickup-button="""" data-region=""grande_sao_paulo"" data-tooltip="".tooltip"" disabled="""">
+Comprar e retirar
+<div class=""tooltip align-center"" data-tooltip-message="""" x-placement=""top"">
+Produto indisponível.
+</div>
+</button>
+</div>","
+","<script type=""e714ff8a52e381521d174786-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '3.949'.replace('.', '')
+  const price = integers + '.90'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ar condicionado Split 24000 BTUs Quente e Frio 220V Series A1 TCL',
+          'id': '91697550',
+          'price': price,
+          'brand': 'TCL',
+          'category': 'climatizacao-e-ventilacao/ar-condicionado',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+"
+"
+"
+"
+ 
+"
+"
+"
+
+"
+"
+"
+"
+"
+"
+"
+","<div class=""product-map-stock"">
+<div class=""stock-info-wrapper"" data-brand=""TCL"" data-category=""climatizacao-e-ventilacao/ar-condicionado"" data-department=""03"" data-is-locate-on-store-enabled="""" data-lm=""91697550"" data-packaging=""1"" data-packaging-unit=""UN"" data-price='{""integers"":""3.949"",""decimals"":""90""}' data-product-name=""Ar condicionado Split 24000 BTUs Quente e Frio 220V Series A1 TCL"" data-region=""grande_sao_paulo"" data-show-batch-search-button="""" data-stock-info="""" data-stock-info-wrapper="""" data-store-name="""" data-store-slug="""" data-unit=""un"">
+<div class=""stock-buttons"">
+<div class=""shell-loader stock-buttons-shell""></div>
+</div>
+</div>
+</div>","
+","<div class=""product-whatsapp"" data-call-center-content="""" data-whatsapp-enabled=""1""></div>","
+"
+"
+"
