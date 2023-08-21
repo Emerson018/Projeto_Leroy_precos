@@ -28,4 +28,4 @@ if values_to_add:
 else:
     print('Valor já existente na planilha!')
 
-    #AQUI TÁ DANDO UM APPEN AOS VALORES NA PLANILHA, EM CADA LINHA E COLUNA
+    #AQUI TÁ DANDO UM APPEN AOS VALORES NA PLANILHA, EM CADA LINHA E COLUNA. funcionando
