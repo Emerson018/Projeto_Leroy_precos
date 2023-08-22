@@ -75,3 +75,15 @@ window.mainloop()
 #NO VÍDEO DE ESTUDOS, EU PAREI EM 6:20:00
 #9:45 mostra como colocar em dark mode e trocar as cores qndo troca os modos
 #10:17 aparece como botar pop up    
+
+'''
+>>> pra add no programa:
+-pop up com nom max 8 numeros.
+-avisar que nao é possível letras
+-daark mode e light mode
+-texto mostrando o que foi adicionado, e caso ja exista, mostrar os valores
+-index q mostra a qntd de lms na planilha
+-texto mostrando que o valor já existe na planilha
+-botao para mostrar os itens do excel(se possivel)
+- 
+'''
