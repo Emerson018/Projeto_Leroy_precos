@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from tkinter import ttk
+import tkinter as tk
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('green')
@@ -7,9 +9,18 @@ window = ctk.CTk()
 window.title('Preços Leroy Merlin')
 window.geometry('800x500')
 
+string_var = tk.StringVar()
 
 def fecha_programa():
     window.destroy()
+
+def button_func():
+    entry_text = entry.get()
+
+    label['text'] = entry_text
+
+    #desativa a palavra
+    label['state'] = 'disable'
 
 frame = ctk.CTkFrame(master=window)
 frame.pack(
@@ -35,11 +46,21 @@ label.pack(
     padx=10
     )
 
-entry1 = ctk.CTkEntry(
-    master=frame,
-    placeholder_text='Insira o LM aqui'
+label2 = ttk.Label(
+        master=frame,
+        text='texto inicial',
+        background= 'pink',
     )
-entry1.pack(
+label2.pack(side= 'bottom', fill='none')
+
+
+
+entry = ctk.CTkEntry(
+    master=frame,
+    placeholder_text='Insira o LM aqui',
+    textvariable=string_var
+    )
+entry.pack(
     pady=12,
     padx=10
     )
@@ -47,6 +68,7 @@ entry1.pack(
 search_lm_button = ctk.CTkButton(
     master=frame,
     text='Validar preço',
+    command= button_func
     #command= find_price()
     )
 search_lm_button.pack(
@@ -66,9 +88,6 @@ button_exit.pack(
     anchor='se'
     )
 
-
-
-
 window.mainloop()
 
 
@@ -80,7 +99,7 @@ window.mainloop()
 >>> pra add no programa:
 -pop up com nom max 8 numeros.
 -avisar que nao é possível letras
--daark mode e light mode
+-dark mode e light mode
 -texto mostrando o que foi adicionado, e caso ja exista, mostrar os valores
 -index q mostra a qntd de lms na planilha
 -texto mostrando que o valor já existe na planilha
