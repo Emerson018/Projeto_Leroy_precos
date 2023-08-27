@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+from bs4 import BeautifulSoup
 
 #Chrome_options__
 chrome_options = Options()

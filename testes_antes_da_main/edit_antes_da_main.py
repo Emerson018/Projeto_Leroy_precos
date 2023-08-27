@@ -97,9 +97,10 @@ def find_price(prod_price):
 #variables__
 ean_13 = ''
 
+url = input('Digite o link: ')
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
+#url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
@@ -114,13 +115,16 @@ prod_title = soup.find('h1', class_ = 'product-title align-left color-text').tex
 
 prod_price = soup.find('div', class_= 'product-price-tag')
 
+link = soup.find('href')
+
 #call_functions__
+
 linhas_texto = find_price(prod_price)
 reais = format_real(linhas_texto)
 centavos = format_cents(linhas_texto)
 
 #adjust_price__ 
-reais = (reais + centavos).replace('.', ',')
+reais = (reais + centavos).replace('.', ',',2)
 
 #create dict__
 product = {'LM': [ean_13],
@@ -136,37 +140,4 @@ print(
     f'Preco atual: {reais}')
 
 
-'''
-
-tava usando para salvar preco antigo, depois ler para conferir se o preço batia
-with open(nome_arquivo, 'w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow([preco_antigo])
-
-with open(nome_arquivo, 'r') as file:
-    preco_salvo = file.read().strip().replace('"','')
-
-os.remove(nome_arquivo)
-
-
-===========
-def verifica_preco(preco_salvo, preco_atual):
-    if preco_salvo != preco_atual:
-        print('Houve uma alterção no preço!')
-    else:
-        print('O preço continua o mesmo.')
-
-
-preco_antigo =','.join(valores)
-preco_antigo = (preco_antigo + centavos).replace('.',',')
-
-
-f'Preco antigo: {preco_antigo}'
-
-verifica_preco(preco_atual, preco_antigo)
-
-
-
-
-
-'''
+#tentar fazer com que o programa econtre qualquer valor ao inves de valores acima de R$1.000
