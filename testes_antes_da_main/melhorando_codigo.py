@@ -1,120 +1,132 @@
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import customtkinter as ctk
+import time
 from bs4 import BeautifulSoup
-import pandas as pd
 import requests
-import re
-import csv
-import datetime
-import os
-from openpyxl import load_workbook
-
-#functions__
-def verifica_preco(preco_salvo, preco_atual):
-    if preco_salvo != preco_atual:
-        print('Houve uma alterção no preço!')
-    else:
-        print('O preço continua o mesmo.')
-
-#variables__
-palavra_chave = 'const'
-contador = 0
-valor_real = []
-valor_centavo = []
-linhas_texto = ''
-ean_13 = ''
-padrao_real = r'\d+\.\d{3}|\d.\d{2}'
-padrao_centavo = r'.\d{2}'
-data_hora = datetime.datetime.now()
-nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
 
-#app_action___
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+def get_url(lm_cliente):
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+    chrome_options = Options()
+    #chrome_options.add_argument('--headless') pra funcionar sem abrir o programa
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    chrome_options.add_experimental_option("detach", True)
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get('https://www.leroymerlin.com.br/')
+    driver.implicitly_wait(5)
 
-url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
+    time.sleep(3)
+    troca_regiao = driver.find_element(By.XPATH,
+                            '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
+    time.sleep(1)
+    seleciona_cep = driver.find_element(By.XPATH,
+                            '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
+    time.sleep(1)
+    seleciona_cdd = driver.find_element(By.XPATH,
+                            '//*[@id="radix-:r2:"]/form/button').click()
+    time.sleep(1)
+    input_lm = driver.find_element(By.XPATH,
+                            '//*[@id="autocomplete-0-input"]')
+    time.sleep(1)
+    input_lm.send_keys(lm_cliente)
+    input_lm.send_keys(Keys.ENTER)
 
-req = requests.get(url,headers=headers)
-html_content = req.text
-soup = BeautifulSoup(html_content, "html.parser")
+    web_link = driver.current_url
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+    req = requests.get(web_link,headers=headers)
+    html_content = req.text
+    soup = BeautifulSoup(html_content, "html.parser")
 
-#data_get___
-prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
-for caractere in prod_barcode:
-    if caractere.isdigit():
-        ean_13 += caractere
-
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
-
-prod_price = soup.find('div', class_= 'product-price-tag')
-
-#Write_archive__
-with open(nome_arquivo, 'w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerows(prod_price)
-
-#Read_archive__
-with open(nome_arquivo, 'r') as file:
-    reader = csv.reader(file)
-
-    for row in reader:
-        linhas_texto = linhas_texto + '.'.join(row) + '\n'
-
-#remove_archive__
-os.remove(nome_arquivo)
-
-#find_real__
-def find_real(valor_real, linhas_texto):
-    for linha in linhas_texto.split('\n'):
-        if palavra_chave in linha:
-            match = re.search(padrao_real, linha)
-            if match:
-                preco = match.group()
-                valor_real.append(preco)
-                contador += 2
-                if contador >=2:
-                    break
-    return valor_real
-
-#find_centavo__
-for linha in linhas_texto.split('\n'):
-    if palavra_chave in linha:
-        match = re.search(padrao_centavo, linha)
-        if match:
-            preco = match.group()
-            valor_centavo.append(preco)
-            contador += 1
-            if contador >=4:
-                centavos = valor_centavo[1]
-                break
-
-#adjust_price__
-find_real()
-preco_atual =','.join(valor_real)
-preco_atual = (preco_atual + centavos).replace('.', ',')
-preco_antigo =','.join(valor_real)
-preco_antigo = (preco_antigo + centavos).replace('.',',')
-
-#create_data_base__
-with open(nome_arquivo, 'w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow([preco_antigo])
-
-with open(nome_arquivo, 'r') as file:
-    preco_salvo = file.read().strip().replace('"','')
-
-os.remove(nome_arquivo)
-
-product = {'LM': [ean_13],
-        'Title': [prod_title],
-        'Price': [preco_atual]}
-
-dados = pd.DataFrame(product)
-dados.to_csv('produto.csv', index= False, encoding= 'utf-8', sep= ';')
+    ean_13 = ''
+    prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
+    for caractere in prod_barcode:
+        if caractere.isdigit():
+            ean_13 += caractere
+    print(ean_13)
 
 
-#show_code__
-print(f'Código: {ean_13}\n'
-       f'Título: {prod_title}\n'
-       f'Preco atual: {preco_atual}\n'
-       f'Preco antigo: {preco_salvo}')
 
-verifica_preco(preco_atual, preco_salvo)
+ctk.set_appearance_mode('dark')
+ctk.set_default_color_theme('green')
+
+window = ctk.CTk()
+window.title('Preços Leroy Merlin')
+window.geometry('800x500')
+
+
+def fecha_programa():
+    window.destroy()
+
+frame = ctk.CTkFrame(master=window)
+frame.pack(
+    pady=20,
+    padx= 60,
+    fill= 'both',
+    expand=True
+    )
+
+font_label = ctk.CTkFont(
+    family='Calibri',
+    size=24,
+    weight='bold'
+    )
+
+label = ctk.CTkLabel(
+    master=frame,
+    text= 'Procura LM',
+    font=font_label,
+    )
+label.pack(
+    pady=12,
+    padx=10
+    )
+
+entry1 = ctk.CTkEntry(
+    master=frame,
+    placeholder_text='Insira o LM aqui'
+    )
+entry1.pack(
+    pady=12,
+    padx=10
+    )
+
+search_lm_button = ctk.CTkButton(
+    master=frame,
+    text='Validar preço',
+    command=lambda: get_url(entry1.get())
+    )
+search_lm_button.pack(
+    pady=12,
+    padx=10
+    )
+
+button_exit = ctk.CTkButton(
+    master=window,
+    text ='Fechar programa',
+    command=window.destroy
+    )
+button_exit.pack(
+    side='bottom',
+    padx=10,
+    pady=10,
+    anchor='se'
+    )
+
+def mostr_msg_erro():
+    label2 = ctk.CTkLabel(
+        master=frame,
+        text= 'Procura LM',
+        font=font_label,
+        )
+    label2.pack(
+        pady=12,
+        padx=10,
+        side= 'left'
+        )
+
+    
+window.mainloop()
+
