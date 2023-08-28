@@ -6,7 +6,72 @@ import customtkinter as ctk
 import time
 from bs4 import BeautifulSoup
 import requests
+import pandas as pd
+import requests
+import re
+import csv
+import datetime
+import os
 
+def format_real(text_lines):
+    key_word = 'const'
+    default = r'\d+\.\d{3}|\d.\d{2}'
+    values = []
+    counter = 0
+
+    for line in text_lines.split('\n'):
+        if key_word in line:
+            match = re.search(default, line)
+            if match:
+                price = match.group()
+                values.append(price)
+                counter +=2
+                if counter >=2:
+                    break
+
+    price_now =','.join(values)
+    return price_now
+
+def format_cents(text_lines):
+    key_word = 'const'
+    default = r'.\d{2}'
+    values = []
+    counter = 0
+
+    for line in text_lines.split('\n'):
+        if key_word in line:
+            match = re.search(default, line)
+            if match:
+                price = match.group()
+                values.append(price)
+                counter +=1
+                if counter >=4:
+                    cents_value = values[1]
+                    break
+    
+    return cents_value
+
+def find_price(prod_price):
+
+    linhas_texto = ''
+    data_hora = datetime.datetime.now()
+    nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
+
+    #Write_archive__
+    with open(nome_arquivo, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(prod_price)
+
+    #Read_archive__
+    with open(nome_arquivo, 'r') as file:
+        reader = csv.reader(file)
+
+        for row in reader:
+            linhas_texto = linhas_texto + '.'.join(row) + '\n'
+
+    os.remove(nome_arquivo)
+
+    return linhas_texto
 
 def get_url(lm_cliente):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
@@ -16,24 +81,24 @@ def get_url(lm_cliente):
     chrome_options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.leroymerlin.com.br/')
-    driver.implicitly_wait(5)
 
-    time.sleep(3)
+    time.sleep(5)
     troca_regiao = driver.find_element(By.XPATH,
                             '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
-    time.sleep(1)
+    time.sleep(3)
     seleciona_cep = driver.find_element(By.XPATH,
                             '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
-    time.sleep(1)
+    time.sleep(3)
     seleciona_cdd = driver.find_element(By.XPATH,
                             '//*[@id="radix-:r2:"]/form/button').click()
-    time.sleep(1)
+    time.sleep(3)
     input_lm = driver.find_element(By.XPATH,
                             '//*[@id="autocomplete-0-input"]')
-    time.sleep(1)
+    time.sleep(3)
     input_lm.send_keys(lm_cliente)
     input_lm.send_keys(Keys.ENTER)
 
+    
     web_link = driver.current_url
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
     req = requests.get(web_link,headers=headers)
@@ -45,9 +110,36 @@ def get_url(lm_cliente):
     for caractere in prod_barcode:
         if caractere.isdigit():
             ean_13 += caractere
-    print(ean_13)
+
+    prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
+
+    prod_price = soup.find('div', class_= 'product-price-tag')
 
 
+    linhas_texto = find_price(prod_price)
+    reais = format_real(linhas_texto)
+    centavos = format_cents(linhas_texto)
+
+    #adjust_price__ 
+    reais = (reais + centavos).replace('.', ',',2)
+
+    #create dict__
+    product = {'LM': [ean_13],
+            'Title': [prod_title],
+            'Price': [reais]}
+    
+
+    print(
+        'Os seguintes valores foram adicionados:\n\n'
+        f'Código: {ean_13}\n'
+        f'Título: {prod_title}\n'
+        f'Preco atual: {reais}')
+
+    driver.quit()
+
+def fecha_programa():
+
+    window.destroy()
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('green')
@@ -57,8 +149,7 @@ window.title('Preços Leroy Merlin')
 window.geometry('800x500')
 
 
-def fecha_programa():
-    window.destroy()
+
 
 frame = ctk.CTkFrame(master=window)
 frame.pack(
@@ -114,18 +205,6 @@ button_exit.pack(
     pady=10,
     anchor='se'
     )
-
-def mostr_msg_erro():
-    label2 = ctk.CTkLabel(
-        master=frame,
-        text= 'Procura LM',
-        font=font_label,
-        )
-    label2.pack(
-        pady=12,
-        padx=10,
-        side= 'left'
-        )
 
     
 window.mainloop()

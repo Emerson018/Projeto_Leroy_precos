@@ -8,7 +8,7 @@ import os
 
 #functions__
 def add_values_to_excel(dados):
-    dados = pd.DataFrame(product)
+    dados = pd.DataFrame(dados)
 
     df1 = pd.read_excel('teste.xlsx')
     existing_lm_values = df1['LM'].dropna().tolist()
@@ -114,8 +114,6 @@ for caractere in prod_barcode:
 prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
 
 prod_price = soup.find('div', class_= 'product-price-tag')
-
-link = soup.find('href')
 
 #call_functions__
 
