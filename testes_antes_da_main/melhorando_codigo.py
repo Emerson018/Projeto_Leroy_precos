@@ -13,6 +13,7 @@ import csv
 import datetime
 import os
 
+
 def format_real(text_lines):
     key_word = 'const'
     default = r'\d+\.\d{3}|\d.\d{2}'
@@ -81,23 +82,28 @@ def get_url(lm_cliente):
     chrome_options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.leroymerlin.com.br/')
-
+    
     time.sleep(5)
     troca_regiao = driver.find_element(By.XPATH,
                             '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
-    time.sleep(3)
-    seleciona_cep = driver.find_element(By.XPATH,
+    
+    time.sleep(4)
+    digita_cep = driver.find_element(By.XPATH,
                             '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
-    time.sleep(3)
+    
+    time.sleep(2)
     seleciona_cdd = driver.find_element(By.XPATH,
                             '//*[@id="radix-:r2:"]/form/button').click()
-    time.sleep(3)
+    
+    time.sleep(5)
     input_lm = driver.find_element(By.XPATH,
                             '//*[@id="autocomplete-0-input"]')
-    time.sleep(3)
+    
+    
     input_lm.send_keys(lm_cliente)
+    time.sleep(1)
     input_lm.send_keys(Keys.ENTER)
-
+    
     
     web_link = driver.current_url
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
@@ -128,14 +134,16 @@ def get_url(lm_cliente):
             'Title': [prod_title],
             'Price': [reais]}
     
-
+    produto = [ean_13,prod_title,reais]
     print(
         'Os seguintes valores foram adicionados:\n\n'
         f'Código: {ean_13}\n'
         f'Título: {prod_title}\n'
-        f'Preco atual: {reais}')
+        f'Preco atual: {reais}',)
 
     driver.quit()
+
+    text.insert('1.0', produto)
 
 def fecha_programa():
 
@@ -147,9 +155,6 @@ ctk.set_default_color_theme('green')
 window = ctk.CTk()
 window.title('Preços Leroy Merlin')
 window.geometry('800x500')
-
-
-
 
 frame = ctk.CTkFrame(master=window)
 frame.pack(
@@ -193,6 +198,13 @@ search_lm_button.pack(
     pady=12,
     padx=10
     )
+
+text = ctk.CTkTextbox(
+    master= frame,
+    width= 300, #numero de caracteres/linha
+    height= 200  #qntd de linhas
+)
+text.pack()
 
 button_exit = ctk.CTkButton(
     master=window,
