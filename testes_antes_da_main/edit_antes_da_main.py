@@ -8,7 +8,7 @@ import os
 
 #functions__
 def add_values_to_excel(dados):
-    dados = pd.DataFrame(dados)
+    dados = pd.DataFrame(product)
 
     df1 = pd.read_excel('teste.xlsx')
     existing_lm_values = df1['LM'].dropna().tolist()

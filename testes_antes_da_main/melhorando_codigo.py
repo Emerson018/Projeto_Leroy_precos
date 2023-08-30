@@ -13,6 +13,32 @@ import csv
 import datetime
 import os
 
+def add_values_to_excel(dados):
+    produto = pd.DataFrame(dados)
+
+    df1 = pd.read_excel('teste.xlsx')
+    existing_lm_values = df1['LM'].dropna().tolist()
+
+    new_lm_values = dados['LM'].tolist()
+    values_to_add = [lm for lm in new_lm_values if lm not in existing_lm_values]
+
+    if values_to_add:
+        dados_to_add = dados[dados['LM'].isin(values_to_add)]
+        with pd.ExcelWriter(
+                            'teste.xlsx',
+                            mode='a',
+                            engine= 'openpyxl',
+                            if_sheet_exists='overlay'
+                            ) as writer:
+            
+            dados_to_add.to_excel(
+                        writer,
+                        sheet_name='Sheet1',
+                        header= None,
+                        startrow=writer.sheets['Sheet1'].max_row,
+                        index=False
+                        )
+        print('valores adicionados com sucesso!')
 
 def format_real(text_lines):
     key_word = 'const'
@@ -74,36 +100,36 @@ def find_price(prod_price):
 
     return linhas_texto
 
-def get_url(lm_cliente):
+def get_informations(lm_cliente):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
     chrome_options = Options()
-    #chrome_options.add_argument('--headless') pra funcionar sem abrir o programa
+    #chrome_options.add_argument('--headless') #pra funcionar sem abrir o programa
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.leroymerlin.com.br/')
     
+
     time.sleep(5)
     troca_regiao = driver.find_element(By.XPATH,
-                            '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
-    
-    time.sleep(4)
+                                '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
+ 
+    time.sleep(5)
     digita_cep = driver.find_element(By.XPATH,
-                            '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
-    
+                                '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
+
     time.sleep(2)
     seleciona_cdd = driver.find_element(By.XPATH,
-                            '//*[@id="radix-:r2:"]/form/button').click()
-    
-    time.sleep(5)
+                                '//*[@id="radix-:r2:"]/form/button').click()
+
+    time.sleep(4)
     input_lm = driver.find_element(By.XPATH,
-                            '//*[@id="autocomplete-0-input"]')
-    
-    
-    input_lm.send_keys(lm_cliente)
+                                '//*[@id="autocomplete-0-input"]')
+
     time.sleep(1)
+    input_lm.send_keys(lm_cliente)
     input_lm.send_keys(Keys.ENTER)
-    
+
     
     web_link = driver.current_url
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
@@ -143,11 +169,12 @@ def get_url(lm_cliente):
 
     driver.quit()
 
-    text.insert('1.0', produto)
+
 
 def fecha_programa():
 
     window.destroy()
+
 
 ctk.set_appearance_mode('dark')
 ctk.set_default_color_theme('green')
@@ -192,7 +219,7 @@ entry1.pack(
 search_lm_button = ctk.CTkButton(
     master=frame,
     text='Validar preço',
-    command=lambda: get_url(entry1.get())
+    command=lambda: get_informations(entry1.get())
     )
 search_lm_button.pack(
     pady=12,
@@ -206,6 +233,7 @@ text = ctk.CTkTextbox(
 )
 text.pack()
 
+
 button_exit = ctk.CTkButton(
     master=window,
     text ='Fechar programa',
@@ -217,7 +245,19 @@ button_exit.pack(
     pady=10,
     anchor='se'
     )
+button_add_excel = ctk.CTkButton(
+    master= frame,
+    text= 'Add ao banco de dados',
+    #command= lambda: 
+)
+button_add_excel.pack(
+     side='bottom',
+    padx=10,
+    pady=10,
+    
 
+)
     
 window.mainloop()
 
+#tentar transforar o que foi salvo no texto em um arquivo reconhecido pelo excel, como uma lista ou uma tupla ou ate mesmo um dicionario. ====
