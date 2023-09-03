@@ -169,8 +169,6 @@ def get_informations(lm_cliente):
 
     driver.quit()
 
-
-
 def fecha_programa():
 
     window.destroy()
@@ -233,7 +231,6 @@ text = ctk.CTkTextbox(
 )
 text.pack()
 
-
 button_exit = ctk.CTkButton(
     master=window,
     text ='Fechar programa',
@@ -254,10 +251,10 @@ button_add_excel.pack(
      side='bottom',
     padx=10,
     pady=10,
-    
 
 )
     
 window.mainloop()
 
 #tentar transforar o que foi salvo no texto em um arquivo reconhecido pelo excel, como uma lista ou uma tupla ou ate mesmo um dicionario. ====
+#tentar usar o que o chatgpt falou
