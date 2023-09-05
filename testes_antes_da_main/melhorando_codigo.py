@@ -2,6 +2,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
 import customtkinter as ctk
 import time
 from bs4 import BeautifulSoup
@@ -12,33 +13,6 @@ import re
 import csv
 import datetime
 import os
-
-def add_values_to_excel(dados):
-    produto = pd.DataFrame(dados)
-
-    df1 = pd.read_excel('teste.xlsx')
-    existing_lm_values = df1['LM'].dropna().tolist()
-
-    new_lm_values = dados['LM'].tolist()
-    values_to_add = [lm for lm in new_lm_values if lm not in existing_lm_values]
-
-    if values_to_add:
-        dados_to_add = dados[dados['LM'].isin(values_to_add)]
-        with pd.ExcelWriter(
-                            'teste.xlsx',
-                            mode='a',
-                            engine= 'openpyxl',
-                            if_sheet_exists='overlay'
-                            ) as writer:
-            
-            dados_to_add.to_excel(
-                        writer,
-                        sheet_name='Sheet1',
-                        header= None,
-                        startrow=writer.sheets['Sheet1'].max_row,
-                        index=False
-                        )
-        print('valores adicionados com sucesso!')
 
 def format_real(text_lines):
     key_word = 'const'
@@ -101,6 +75,34 @@ def find_price(prod_price):
     return linhas_texto
 
 def get_informations(lm_cliente):
+    
+    def add_values_to_excel(dados):
+        dados = pd.DataFrame(product)
+
+        df1 = pd.read_excel('teste.xlsx')
+        existing_lm_values = df1['LM'].dropna().tolist()
+
+        new_lm_values = dados['LM'].tolist()
+        values_to_add = [lm for lm in new_lm_values if lm not in existing_lm_values]
+
+        if values_to_add:
+            dados_to_add = dados[dados['LM'].isin(values_to_add)]
+            with pd.ExcelWriter(
+                                'teste.xlsx',
+                                mode='a',
+                                engine= 'openpyxl',
+                                if_sheet_exists='overlay'
+                                ) as writer:
+                
+                dados_to_add.to_excel(
+                            writer,
+                            sheet_name='Sheet1',
+                            header= None,
+                            startrow=writer.sheets['Sheet1'].max_row,
+                            index=False
+                            )
+            print('valores adicionados com sucesso!')
+
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
     chrome_options = Options()
     #chrome_options.add_argument('--headless') #pra funcionar sem abrir o programa
@@ -109,18 +111,21 @@ def get_informations(lm_cliente):
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.leroymerlin.com.br/')
     
-
+    
     time.sleep(5)
     troca_regiao = driver.find_element(By.XPATH,
-                                '//*[@id="radix-:r5:"]/div/div/div/button[1]').click()
- 
-    time.sleep(5)
-    digita_cep = driver.find_element(By.XPATH,
-                                '//*[@id="field-backyard-ui-:rl:"]').send_keys('90810240')
+                                '//*[@id="radix-:r5:"]/div/div/div/button[1]')
+    troca_regiao.click()
 
-    time.sleep(2)
+    time.sleep(4)
+    digita_cep = driver.find_element(By.XPATH,
+                                '//*[@id="field-backyard-ui-:rl:"]')
+    digita_cep.send_keys('90810240')
+
+    time.sleep(4)
     seleciona_cdd = driver.find_element(By.XPATH,
-                                '//*[@id="radix-:r2:"]/form/button').click()
+                                '//*[@id="radix-:r2:"]/form/button')
+    seleciona_cdd.click()
 
     time.sleep(4)
     input_lm = driver.find_element(By.XPATH,
@@ -166,6 +171,8 @@ def get_informations(lm_cliente):
         f'Código: {ean_13}\n'
         f'Título: {prod_title}\n'
         f'Preco atual: {reais}',)
+    
+    add_values_to_excel(product)
 
     driver.quit()
 
