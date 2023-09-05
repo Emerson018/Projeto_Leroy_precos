@@ -7,6 +7,13 @@ import datetime
 import os
 
 #functions__
+
+def add_values_to_csv(dados, nome_arquivo):
+
+    with open(nome_arquivo, 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(dados)
+
 def add_values_to_excel(dados):
     dados = pd.DataFrame(product)
 
@@ -32,7 +39,6 @@ def add_values_to_excel(dados):
                         startrow=writer.sheets['Sheet1'].max_row,
                         index=False
                         )
-        print('valores adicionados com sucesso!')
 
 def format_real(text_lines):
     key_word = 'const'
@@ -77,7 +83,7 @@ def find_price(prod_price):
     linhas_texto = ''
     data_hora = datetime.datetime.now()
     nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
-
+    
     #Write_archive__
     with open(nome_arquivo, 'w', newline='') as file:
         writer = csv.writer(file)
@@ -111,31 +117,34 @@ for caractere in prod_barcode:
     if caractere.isdigit():
         ean_13 += caractere
 
-prod_title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
+title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
 
 prod_price = soup.find('div', class_= 'product-price-tag')
+nome_arquivo_csv = "dados.csv"
 
 #call_functions__
-
 linhas_texto = find_price(prod_price)
 reais = format_real(linhas_texto)
-centavos = format_cents(linhas_texto)
+centavos = format_cents(linhas_texto,)
 
 #adjust_price__ 
-reais = (reais + centavos).replace('.', ',',2)
+preco = (reais + centavos)
 
 #create dict__
-product = {'LM': [ean_13],
-        'Title': [prod_title],
-        'Price': [reais]}
+product = {'LM': [str(ean_13)],
+        'Title': [str(title)],
+        'Price': [preco]}
+
+produtos_csv = [ean_13, title, preco]
 
 add_values_to_excel(product)
+add_values_to_csv(produtos_csv, nome_arquivo_csv)
 
 print(
     'Os seguintes valores foram adicionados:\n\n'
     f'Código: {ean_13}\n'
-    f'Título: {prod_title}\n'
-    f'Preco atual: {reais}')
+    f'Título: {title}\n'
+    f'Preco atual: {preco}')
 
 
 #tentar fazer com que o programa econtre qualquer valor ao inves de valores acima de R$1.000

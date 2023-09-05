@@ -1,0 +1,131 @@
+"
+"
+"
+","<div class=""shell-loader price-tag-border-top""></div>","
+","<div class=""shell-loader price-tag-to-price""></div>","
+","<div class=""shell-loader price-tag-installments""></div>","
+","<div class=""shell-loader price-tag-sold-by""></div>","
+"
+"
+"
+"
+","<a class=""payment-trigger color-primary text-underline"" data-payment-methods-="""" data-seller-link="""" href=""#"" leroy="""">
+<strong>
+Formas de pagamento
+</strong>
+</a>","
+"
+"
+"
+"
+ 
+"
+"
+"
+"
+","<div>
+<button class=""ecommerce-button purchase-button"" data-button=""ecommerce"" data-component=""add-to-cart tooltip"" data-override-product-quantity=""false"" data-product-code=""91697550"" data-shop-offer-id="""" data-tooltip="".tooltip"" disabled="""">
+<span>Comprar e receber</span>
+<div class=""tooltip align-center"" data-tooltip-message="""" x-placement=""top"">
+Produto indisponível para comprar pelo Site. Consulte o estoque das Lojas.
+</div>
+</button>
+</div>","
+","<span class=""purchase-buttons-option"">ou</span>","
+","<script type=""ad2bf8903097bb6d42e16c7a-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '3.699'.replace('.', '')
+  const price = integers + '.00'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ar Condicionado Split 24000 BTUs Quente e Frio Branco 220V Series A1 TCL',
+          'id': '91697550',
+          'price': price,
+          'brand': 'TCL',
+          'category': 'climatizacao-e-ventilacao/ar-condicionado/ar-condicionado-split',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+","<div>
+<button class=""pickup-in-store-button purchase-button"" data-button=""pickupInStore"" data-component=""stock-checker tooltip"" data-lm=""91697550"" data-pickup-button="""" data-region=""grande_porto_alegre"" data-tooltip="".tooltip"" disabled="""">
+Comprar e retirar
+<div class=""tooltip align-center"" data-tooltip-message="""" x-placement=""top"">
+Produto indisponível.
+</div>
+</button>
+</div>","
+","<script type=""ad2bf8903097bb6d42e16c7a-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '3.699'.replace('.', '')
+  const price = integers + '.00'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ar Condicionado Split 24000 BTUs Quente e Frio Branco 220V Series A1 TCL',
+          'id': '91697550',
+          'price': price,
+          'brand': 'TCL',
+          'category': 'climatizacao-e-ventilacao/ar-condicionado/ar-condicionado-split',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+"
+"
+"
+"
+ 
+"
+"
+"
+
+"
+"
+"
+"
+"
+"
+"
+","<div class=""product-map-stock"">
+<div class=""stock-info-wrapper"" data-brand=""TCL"" data-category=""climatizacao-e-ventilacao/ar-condicionado/ar-condicionado-split"" data-department=""03"" data-is-locate-on-store-enabled="""" data-lm=""91697550"" data-packaging=""1"" data-packaging-unit=""UN"" data-price='{""integers"":""3.699"",""decimals"":""00""}' data-product-name=""Ar Condicionado Split 24000 BTUs Quente e Frio Branco 220V Series A1 TCL"" data-region=""grande_porto_alegre"" data-show-batch-search-button="""" data-stock-info="""" data-stock-info-wrapper="""" data-store-name="""" data-store-slug="""" data-unit=""un"">
+<div class=""stock-buttons"">
+<div class=""shell-loader stock-buttons-shell""></div>
+</div>
+</div>
+</div>","
+","<div class=""product-whatsapp"" data-call-center-content="""" data-whatsapp-enabled=""1""></div>","
+"
+"
+"
