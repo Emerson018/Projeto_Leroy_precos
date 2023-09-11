@@ -41,23 +41,20 @@ def add_values_to_excel(dados):
                         )
 
 def format_real(text_lines):
-    key_word = 'const'
-    default = r'\d+\.\d{3}|\d.\d{2}'
+    
+    default = r"const integers = '([\d.]+)'"
     values = []
-    counter = 0
+    
 
     for line in text_lines.split('\n'):
-        if key_word in line:
-            match = re.search(default, line)
-            if match:
-                price = match.group()
-                values.append(price)
-                counter +=2
-                if counter >=2:
-                    break
-
-    price_now =','.join(values)
-    return price_now
+        match = re.search(default, line)
+        if match:
+            price = match.group()
+            values.append(price)
+               
+    element = values[0]
+    value = element.split("'")[1]
+    return value
 
 def format_cents(text_lines):
     key_word = 'const'
@@ -146,5 +143,4 @@ print(
     f'Título: {title}\n'
     f'Preco atual: {preco}')
 
-
-#tentar fazer com que o programa econtre qualquer valor ao inves de valores acima de R$1.000
+# só nao ta encontrando valroes abaixo de 10 reais

@@ -1,0 +1,134 @@
+"
+"
+"
+","<div class=""shell-loader price-tag-border-top""></div>","
+","<div class=""shell-loader price-tag-to-price""></div>","
+","<div class=""shell-loader price-tag-installments""></div>","
+","<div class=""shell-loader price-tag-sold-by""></div>","
+"
+"
+"
+"
+","<a 6385145186c1a25bc56533a2="""" class=""payment-trigger color-primary text-underline"" data-payment-methods-="""" data-seller-link="""" href=""#"">
+<strong>
+Formas de pagamento
+</strong>
+</a>","
+"
+"
+"
+"
+ 
+"
+"
+"
+"
+","<div>
+<button class=""ecommerce-button purchase-button"" data-button=""ecommerce"" data-component=""add-to-cart"" data-override-product-quantity=""false"" data-product-code=""90163990"" data-shop-offer-id=""63d012ac125ccf1fb90228aa"">
+<span>Comprar e receber</span>
+</button>
+</div>","
+","<span class=""purchase-buttons-option"">ou</span>","
+","<script type=""f12941931d25fa93db2a2fef-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '219'.replace('.', '')
+  const price = integers + '.90'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ventilador de Teto com Controle de Parede Fenix 3 Pás 96 cm 127V (110V) Ventisol',
+          'id': '90163990',
+          'price': price,
+          'brand': 'Ventisol',
+          'category': 'climatizacao-e-ventilacao/marcas-de-ventiladores/ventisol',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+","<div>
+<button class=""pickup-in-store-button purchase-button"" data-button=""pickupInStore"" data-component=""stock-checker tooltip"" data-lm=""90163990"" data-pickup-button="""" data-region=""grande_sao_paulo"" data-tooltip="".tooltip"" disabled="""">
+Comprar e retirar
+<div class=""tooltip align-center"" data-tooltip-message="""" x-placement=""top"">
+Produto indisponível.
+</div>
+</button>
+</div>","
+","<script type=""f12941931d25fa93db2a2fef-text/javascript"">
+window.dataLayer = window.dataLayer || []
+
+var shopNameElement = document.querySelector('[data-seller-selected]')
+var shopName = shopNameElement && shopNameElement.textContent
+
+function addToCartDataLayer () {
+  const integers = '219'.replace('.', '')
+  const price = integers + '.90'
+
+  window.dataLayer.push({
+    'event': 'addToCart',
+    'ecommerce': {
+      'currencyCode': 'BRL',
+      'add': {
+        'products': [{
+          'name': 'Ventilador de Teto com Controle de Parede Fenix 3 Pás 96 cm 127V (110V) Ventisol',
+          'id': '90163990',
+          'price': price,
+          'brand': 'Ventisol',
+          'category': 'climatizacao-e-ventilacao/marcas-de-ventiladores/ventisol',
+          'quantity': 1,
+          'dimension8': 'delivery',
+          'dimension15': shopName
+        }]
+      }
+    }
+  })
+}
+
+</script>","
+"
+"
+"
+"
+ 
+"
+"
+"
+
+"
+"
+"
+","<ul>
+<li class=""buybox-option shell-loader""></li>
+<li class=""buybox-option shell-loader""></li>
+<li class=""buybox-option shell-loader""></li>
+<li class=""buybox-more-options shell-loader""></li>
+</ul>","
+"
+"
+"
+"
+","<div class=""product-map-stock"">
+<div class=""stock-info-wrapper"" data-brand=""Ventisol"" data-button-disabled=""true"" data-category=""climatizacao-e-ventilacao/marcas-de-ventiladores/ventisol"" data-department=""13"" data-is-locate-on-store-enabled="""" data-lm=""90163990"" data-packaging=""1"" data-packaging-unit=""UN"" data-price='{""integers"":""219"",""decimals"":""90""}' data-product-name=""Ventilador de Teto com Controle de Parede Fenix 3 Pás 96 cm 127V (110V) Ventisol"" data-region=""grande_sao_paulo"" data-show-batch-search-button="""" data-stock-info="""" data-stock-info-wrapper="""" data-store-name="""" data-store-slug="""" data-unit=""un"">
+<div class=""stock-buttons"">
+<div class=""shell-loader stock-buttons-shell""></div>
+</div>
+</div>
+</div>","
+","<div class=""product-whatsapp"" data-call-center-content="""" data-whatsapp-enabled=""1""></div>","
+"
+"
+"

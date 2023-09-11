@@ -24,39 +24,41 @@ def find_price(prod_price):
         for row in reader:
             linhas_texto = linhas_texto + '.'.join(row) + '\n'
 
+    default = r"const integers = '([\d.]+)'"
+
+    values = []
+
+    for line in linhas_texto.split('\n'):
+            match = re.search(default, line)
+            if match:
+                price = match.group()
+                values.append(price)
+            
+
+    elemento = values[0]
+    valor = elemento.split("'")[1]
+
+
     os.remove(nome_arquivo)
 
-    return linhas_texto
+    return valor
 
 
-def format_real(text_lines):
-   
-
-    #lines = text_lines.split('\n')
-
-    asd = text_lines
-    #for line in lines:
-        #valores_numericos = re.findall(r'\d+\.\d+|\d+', text_lines)
-
-    #for _ in range(1):
-        #next(valores_numericos)
 
 
-    return asd
-
-
-url = input('Digite o link: ')
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-#url = "https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM"
+url = "https://www.leroymerlin.com.br/banheira-de-imersao-zen-150x72cm-branco-sensea_91989296"
 req = requests.get(url,headers=headers)
 html_content = req.text
 soup = BeautifulSoup(html_content, "html.parser")
 
 prod_price = soup.find('div', class_= 'product-price-tag')
+span_tag = soup.find('div', {'data-product-pice-tag'})
+
 
 linhas_texto = find_price(prod_price)
-real = format_real(linhas_texto)
 
-print(real)
+print(linhas_texto)
+
 
