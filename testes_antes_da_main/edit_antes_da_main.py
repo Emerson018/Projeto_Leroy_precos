@@ -97,43 +97,53 @@ def find_price(prod_price):
 
     return linhas_texto
 
-#variables__
-ean_13 = ''
+def data_get(soup):
+    ean_13 = ''
+    nome_arquivo_csv = "dados.csv"
 
-url = input('Digite o link: ')
-#app_action___
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-#url = https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM
-req = requests.get(url,headers=headers)
-html_content = req.text
-soup = BeautifulSoup(html_content, "html.parser")
+    prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
+    for caractere in prod_barcode:
+        if caractere.isdigit():
+            ean_13 += caractere
 
-#data_get___
-prod_barcode = soup.find('div', class_ = 'badge product-code badge-product-code').text
-for caractere in prod_barcode:
-    if caractere.isdigit():
-        ean_13 += caractere
+    title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
 
-title = soup.find('h1', class_ = 'product-title align-left color-text').text.replace('\n', '')
+    prod_price = soup.find('div', class_= 'product-price-tag')
 
-prod_price = soup.find('div', class_= 'product-price-tag')
-nome_arquivo_csv = "dados.csv"
+    return nome_arquivo_csv, title, prod_price, ean_13
+
+def format_data():
+    #format_price__ 
+    preco = (reais + centavos)
+
+    #format_data__
+    product = {'LM': [str(ean_13)],
+            'Title': [str(title)],
+            'Price': [preco]}
+    produtos_csv = [ean_13, title, preco]
+
+    return product, produtos_csv, preco
+
+def main():
+    #app_action___
+    url = input('Digite o link: ')
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+    #url = https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM
+    req = requests.get(url,headers=headers)
+    html_content = req.text
+    soup = BeautifulSoup(html_content, "html.parser")
+    
+    return soup
+
 
 #call_functions__
+soup = main()
+nome_arquivo_csv, title, prod_price, ean_13 = data_get(soup)
 linhas_texto = find_price(prod_price)
 reais = format_real(linhas_texto)
-centavos = format_cents(linhas_texto,)
-
-#adjust_price__ 
-preco = (reais + centavos)
-
-#create dict__
-product = {'LM': [str(ean_13)],
-        'Title': [str(title)],
-        'Price': [preco]}
-
-produtos_csv = [ean_13, title, preco]
-
+centavos = format_cents(linhas_texto)
+product, produtos_csv, preco = format_data()
+#save_data__
 add_values_to_excel(product)
 add_values_to_csv(produtos_csv, nome_arquivo_csv)
 
@@ -141,6 +151,6 @@ print(
     'Os seguintes valores foram adicionados:\n\n'
     f'Código: {ean_13}\n'
     f'Título: {title}\n'
-    f'Preco atual: {preco}')
+    f'Preco atual: R${preco}')
 
 # só nao ta encontrando valroes abaixo de 10 reais
