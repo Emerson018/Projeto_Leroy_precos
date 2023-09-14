@@ -33,18 +33,17 @@ def add_values_to_excel(dados):
                             ) as writer:
             
             dados_to_add.to_excel(
-                        writer,
-                        sheet_name='Sheet1',
-                        header= None,
-                        startrow=writer.sheets['Sheet1'].max_row,
-                        index=False
-                        )
+                            writer,
+                            sheet_name='Sheet1',
+                            header= None,
+                            startrow=writer.sheets['Sheet1'].max_row,
+                            index=False
+                            )
 
 def format_real(text_lines):
     
     default = r"const integers = '([\d.]+)'"
     values = []
-    
 
     for line in text_lines.split('\n'):
         match = re.search(default, line)
@@ -52,8 +51,7 @@ def format_real(text_lines):
             price = match.group()
             values.append(price)
                
-    element = values[0]
-    value = element.split("'")[1]
+    value = values[0].split("'")[1]
     return value
 
 def format_cents(text_lines):
@@ -75,7 +73,7 @@ def format_cents(text_lines):
     
     return cents_value
 
-def find_price(prod_price):
+def find_price(prod_price): 
 
     linhas_texto = ''
     data_hora = datetime.datetime.now()
@@ -112,7 +110,7 @@ def data_get(soup):
 
     return nome_arquivo_csv, title, prod_price, ean_13
 
-def format_data():
+def format_data(reais, centavos):
     #format_price__ 
     preco = (reais + centavos)
 
@@ -142,7 +140,7 @@ nome_arquivo_csv, title, prod_price, ean_13 = data_get(soup)
 linhas_texto = find_price(prod_price)
 reais = format_real(linhas_texto)
 centavos = format_cents(linhas_texto)
-product, produtos_csv, preco = format_data()
+product, produtos_csv, preco = format_data(reais, centavos)
 #save_data__
 add_values_to_excel(product)
 add_values_to_csv(produtos_csv, nome_arquivo_csv)
@@ -154,3 +152,19 @@ print(
     f'Preco atual: R${preco}')
 
 # só nao ta encontrando valroes abaixo de 10 reais
+
+'''
+caracteristicas para buscar:
+
+tipo
+garantia
+produto
+marca
+modelo
+cor
+profundidade
+comprimeito
+altura
+potencia
+'''
+

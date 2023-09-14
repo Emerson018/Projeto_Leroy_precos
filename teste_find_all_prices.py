@@ -5,6 +5,12 @@ import csv
 import datetime
 import os
 
+def ajusta_info(infos):
+
+    informacao = infos.find_next('td').text
+
+    return print(informacao)
+
 def find_price(prod_price):
 
     linhas_texto = ''
@@ -42,9 +48,6 @@ def find_price(prod_price):
 
     return valor
 
-
-
-
 #app_action___
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
 url = "https://www.leroymerlin.com.br/banheira-de-imersao-zen-150x72cm-branco-sensea_91989296"
@@ -55,9 +58,21 @@ soup = BeautifulSoup(html_content, "html.parser")
 prod_price = soup.find('div', class_= 'product-price-tag')
 span_tag = soup.find('div', {'data-product-pice-tag'})
 
+info = soup.find('div', class_= 'product-info-details')
+
+
+infos_produto = ['Produto', 'Dimensão', 'Cor','Modelo','Marca', 'Garantia do Fabricante']
+
+#ajusta a informação dos produtos para cada dado contido dentro da lista informações
+#dos produtos se os dados não forem None.
+dados = [ajusta_info(info.find('th',string=dado)) for dado in infos_produto if dado is not None]
+
+
 
 linhas_texto = find_price(prod_price)
 
 print(linhas_texto)
 
-
+#DESCOBRIR O QUE SAO
+#API
+#FRAMEWORK
