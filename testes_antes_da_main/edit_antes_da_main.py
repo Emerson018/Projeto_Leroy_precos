@@ -9,6 +9,30 @@ import os
 # functions__
 
 
+def check_values(ean, file_name):
+    # df = pd.read_csv(file_name, encoding='latin-1')
+    with open(file_name, newline='') as arquivo_csv:
+        leitor = csv.reader(arquivo_csv)
+        encontrou = False
+
+        for linha in leitor:
+            if ean in linha[0]:
+                encontrou = True
+                break
+
+        if encontrou:
+            print('VALORES JÁ EXISTENTES.')
+        else:
+            print
+            add_values_to_excel(product)
+            add_values_to_csv(produtos_csv, nome_arquivo_csv)
+            print(
+                'Os seguintes valores foram adicionados:\n\n'
+                f'Código: {ean_13}\n'
+                f'Título: {title}\n'
+                f'Preco atual: R${preco}')
+
+
 def add_values_to_csv(dados, nome_arquivo):
 
     with open(nome_arquivo, 'a', newline='') as file:
@@ -136,17 +160,17 @@ def data_get(soup):
     )
 
     infos_produto = [
-    'Produto',
-    'Dimensão',
-    'Cor',
-    'Modelo',
-    'Marca',
-    'Garantia do Fabricante'
-    'teste',
-    'Tipo',
-    'Potencia',
-    'Tipo de Ar Condicionado']
-    
+        'Produto',
+        'Dimensão',
+        'Cor',
+        'Modelo',
+        'Marca',
+        'Garantia do Fabricante'
+        'teste',
+        'Tipo',
+        'Potencia',
+        'Tipo de Ar Condicionado']
+
     return nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto
 
 
@@ -171,12 +195,12 @@ def ajusta_info(infos):
 
     return print(informacao)
 
+
 def main():
     # app_action___
     url = input('Digite o link: ')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-    # url = https://www.leroymerlin.com.br/ar-condicionado-split-24000-btus-quente-e-frio-220v-series-a1-tcl_91697550?term=91697550&searchTerm=91697550&searchType=LM
     req = requests.get(
         url,
         headers=headers
@@ -189,29 +213,23 @@ def main():
     return soup
 
 
-# call_functions__
+# Main__
 soup = main()
-nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto = data_get(soup)
+# get_data__
+nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto = data_get(
+    soup)
+# find_price__
 linhas_texto = find_price(prod_price)
+# format_price__
 reais = format_real(linhas_texto)
 centavos = format_cents(linhas_texto)
+# format_data__
 product, produtos_csv, preco = format_data(reais, centavos)
+# check_data__
+check_values(ean_13, nome_arquivo_csv)
 # save_data__
-add_values_to_excel(product)
-add_values_to_csv(produtos_csv, nome_arquivo_csv)
 
-print(
-    'Os seguintes valores foram adicionados:\n\n'
-    f'Código: {ean_13}\n'
-    f'Título: {title}\n'
-    f'Preco atual: R${preco}')
 
 dados = [ajusta_info(infos.find('th', string=dado)) for dado in infos_produto]
 
 # só nao ta encontrando valroes abaixo de 10 reais
-
-'''
-caracteristicas para buscar:
-
-
-'''
