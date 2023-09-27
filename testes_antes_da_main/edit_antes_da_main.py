@@ -7,8 +7,6 @@ import datetime
 import os
 
 # functions__
-
-
 def check_values(ean, file_name):
     # df = pd.read_csv(file_name, encoding='latin-1')
     with open(file_name, newline='') as arquivo_csv:

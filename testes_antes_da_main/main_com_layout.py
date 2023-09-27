@@ -5,8 +5,26 @@ import re
 import csv
 import datetime
 import os
+import customtkinter as ctk
+
 
 # functions__
+def get_url(url):
+    # app_action___
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+    req = requests.get(
+        url,
+        headers=headers
+    )
+    html_content = req.text
+    soup = BeautifulSoup(
+        html_content,
+        "html.parser"
+    )
+    return soup
+
+
 def check_values(ean, file_name):
     # df = pd.read_csv(file_name, encoding='latin-1')
     with open(file_name, newline='') as arquivo_csv:
@@ -195,24 +213,89 @@ def ajusta_info(infos):
 
 
 def main():
-    # app_action___
-    url = input('Digite o link: ')
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
-    req = requests.get(
-        url,
-        headers=headers
-    )
-    html_content = req.text
-    soup = BeautifulSoup(
-        html_content,
-        "html.parser"
-    )
-    return soup
 
+    ctk.set_appearance_mode('dark')
+    ctk.set_default_color_theme('green')
+    window = ctk.CTk()
+    window.title('Database Leroy')
+    window.geometry('800x500')
+
+    frame = ctk.CTkFrame(master=window)
+    frame.pack(
+        pady=20,
+        padx=60,
+        fill='both',
+        expand=True
+    )
+
+    font_label = ctk.CTkFont(
+        family='Calibri',
+        size=24,
+        weight='bold'
+    )
+
+    label = ctk.CTkLabel(
+        master=frame,
+        text= 'Procura LM',
+        font=font_label,
+    )
+    label.pack(
+        pady=12,
+        padx=10
+    )
+
+    entry1 = ctk.CTkEntry(
+        master=frame,
+        placeholder_text='Insira o LM aqui'
+    )
+    entry1.pack(
+        pady=12,
+        padx=10
+    )
+    search_lm_button = ctk.CTkButton(
+        master=frame,
+        text='Validar preço',
+        command=lambda: get_url(entry1.get())
+    )
+    search_lm_button.pack(
+        pady=12,
+        padx=10
+    )
+
+    text = ctk.CTkTextbox(
+        master= frame,
+        width= 300, #numero de caracteres/linha
+        height= 200  #qntd de linhas
+    )
+    text.pack()
+
+    button_exit = ctk.CTkButton(
+        master=window,
+        text ='Fechar programa',
+        command=window.destroy
+        )
+    button_exit.pack(
+        side='bottom',
+        padx=10,
+        pady=10,
+        anchor='se'
+        )
+    
+    button_add_excel = ctk.CTkButton(
+        master= frame,
+        text= 'Add ao banco de dados'
+        #command= lambda: 
+    )
+    button_add_excel.pack(
+        side='bottom',
+        padx=10,
+        pady=10,
+    )
+        
+    window.mainloop()
 
 # Main__
-soup = main()
+soup = get_url()
 # get_data__
 nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto = data_get(
     soup)
