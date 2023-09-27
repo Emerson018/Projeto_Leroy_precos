@@ -172,12 +172,12 @@ def data_get(soup):
     return nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto
 
 
-def format_data(reais, centavos):
+def format_data(reais, centavos, ean_13, title):
     # format_price__
     preco = (reais + centavos)
 
     # format_data__
-    product = {'LM': [str(ean_13)],
+    product = {'LM': [int(ean_13)],
                'Title': [str(title)],
                'Price': [preco]}
     produtos_csv = [ean_13, title, preco]
@@ -222,7 +222,7 @@ linhas_texto = find_price(prod_price)
 reais = format_real(linhas_texto)
 centavos = format_cents(linhas_texto)
 # format_data__
-product, produtos_csv, preco = format_data(reais, centavos)
+product, produtos_csv, preco = format_data(reais, centavos, ean_13, title)
 # check_data__
 check_values(ean_13, nome_arquivo_csv)
 # save_data__
