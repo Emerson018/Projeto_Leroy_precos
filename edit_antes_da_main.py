@@ -8,7 +8,6 @@ import os
 
 # functions__
 def check_values(ean, file_name):
-    # df = pd.read_csv(file_name, encoding='latin-1')
     with open(file_name, newline='') as arquivo_csv:
         leitor = csv.reader(arquivo_csv)
         encontrou = False
@@ -21,7 +20,6 @@ def check_values(ean, file_name):
         if encontrou:
             print('VALORES JÁ EXISTENTES.')
         else:
-            print
             add_values_to_excel(product)
             add_values_to_csv(produtos_csv, nome_arquivo_csv)
             print(
@@ -229,5 +227,7 @@ check_values(ean_13, nome_arquivo_csv)
 
 
 dados = [ajusta_info(infos.find('th', string=dado)) for dado in infos_produto]
+
+
 
 # só nao ta encontrando valroes abaixo de 10 reais

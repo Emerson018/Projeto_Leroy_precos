@@ -1,7 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
 import pandas as pd
-from testes_antes_da_main.edit_antes_da_main import main
 
 def create_server_connection(host_name, user_name, user_pass):
     connection = None
@@ -21,7 +20,7 @@ pw = 'mano34835965'
 db = 'db_leroy'
 connection = create_server_connection('localhost','root', pw)
 
-'''
+
 def create_database(connection, query):
     cursor = connection.cursor()
     try:
@@ -32,7 +31,7 @@ def create_database(connection, query):
 
 create_database_query = "Create database db_leroy"
 create_database(connection, create_database_query)
-'''
+
 
 def create_db_connection(host_name, user_name, user_pass, db_name):
     connection = None
@@ -58,7 +57,7 @@ def execute_query(connection, query):
     except Error as err:
         print(f"Error: '{err}'")
 
-'''
+
 create_product_info = """
 create table products(
 lm int(10) primary key,
@@ -66,16 +65,19 @@ title varchar(100) not null,
 price varchar(10) not null
 )
 """
-'''
 
-#connection = create_db_connection("localhost","root", pw, db)
-#execute_query(connection, create_product_info)
 
-#lm, title, preco = format_data()
+connection = create_db_connection("localhost","root", pw, db)
+execute_query(connection, create_product_info)
+
+lm = 123456
+title = 'lol'
+preco = '24'
+
 
 informacoes_do_produto = """
 insert into products values
-(99999999, 'Carinho de mão', '245.67');
+(lm, title, preco);
 """
 
 connection = create_db_connection("localhost", "root", pw, db)
