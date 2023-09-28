@@ -1,23 +1,9 @@
 import mysql.connector
 from mysql.connector import Error
 
-def create_server_connection(host_name, user_name, user_pass):
-    connection = None
-    try:
-        connection = mysql.connector.connect(
-            host = host_name,
-            user = user_name,
-            passwd = user_pass 
-        )
-        print("MySQL DB connection succesful!")
-    except Error as err:
-        print(f"Error: '{err}'")
-    return connection
-
 
 pw = 'mano34835965'
 db = 'db_leroy'
-connection = create_server_connection('localhost','root', pw)
 
 
 def create_db_connection(host_name, user_name, user_pass, db_name):
@@ -44,14 +30,16 @@ def execute_query(connection, query, data):
     except Error as err:
         print(f"Error: '{err}'")
 
-lm = 123456
+
+
+lm = 11111111
 title = 'lol'
 preco = '24.65'
 
 data = (lm,title,preco)
 
 informacoes_do_produto = """
-INSERT INTO products VALUES
+INSERT INTO products (lm, title, price) VALUES
 (%s, %s, %s);
 """
 

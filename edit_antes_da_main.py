@@ -5,9 +5,40 @@ import re
 import csv
 import datetime
 import os
+import mysql.connector
+from mysql.connector import Error
+
+def create_db_connection(host_name, user_name, user_pass, db_name):
+    connection = None
+    try:
+        connection = mysql.connector.connect(
+            host = host_name,
+            user = user_name,
+            passwd = user_pass,
+            database = db_name
+        )
+        print('MySQL DB connection successfull!')
+    except Error as err:
+        print(f"Error: '{err}")
+    return connection
+
+
+def execute_query(connection, query, data):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query, data)
+        connection.commit()
+        print('Query was successful!')
+    except Error as err:
+        print(f"Error: '{err}'")
+
+
+
 
 # functions__
 def check_values(ean, file_name):
+    #from insert_values_db import create_db_connection, execute_query
+
     with open(file_name, newline='') as arquivo_csv:
         leitor = csv.reader(arquivo_csv)
         encontrou = False
@@ -27,7 +58,7 @@ def check_values(ean, file_name):
                 f'Código: {ean_13}\n'
                 f'Título: {title}\n'
                 f'Preco atual: R${preco}')
-
+            
 
 def add_values_to_csv(dados, nome_arquivo):
 
@@ -228,6 +259,26 @@ check_values(ean_13, nome_arquivo_csv)
 
 dados = [ajusta_info(infos.find('th', string=dado)) for dado in infos_produto]
 
+pw = 'mano34835965'
+db = 'db_leroy'
+
+
+dados_db = (ean_13, title, preco)
+# (lm, title, price)
+
+informacoes_do_produto = """
+INSERT INTO products (lm, title, price) VALUES
+(%s, %s, %s);
+"""
+
+connection = create_db_connection("localhost", "root", pw, db)
+execute_query(connection, informacoes_do_produto,dados_db)
+
 
 
 # só nao ta encontrando valroes abaixo de 10 reais
+
+#O CÓDIGO FUNCIONA, MAS TEM Q COLOCAR O 'FROM IMPORT' DENTRO DA FUNÇÃO
+#PRA ELA NAO RODAR PRIMEIRO QUE O CODIGO MAIN.
+# O PROGRAMA TA RODANDO COM OS VALORES DO 'INSERT_VALUES_DB' AO INVES
+#DESSE DAQUI.
