@@ -1,72 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 from save_data import execute_query, create_db_connection, check_values
-from format_values import format_real, format_cents
-from search_data import find_price
-
-
-def data_get(soup):
-    ean_13 = ''
-    nome_arquivo_csv = "dados.csv"
-
-    prod_barcode = soup.find(
-        'div',
-        class_='badge product-code badge-product-code'
-    ).text
-
-    for caractere in prod_barcode:
-        if caractere.isdigit():
-            ean_13 += caractere
-
-    title = soup.find(
-        'h1',
-        class_='product-title align-left color-text'
-    ).text.replace('\n', '')
-
-    prod_price = soup.find(
-        'div',
-        class_='product-price-tag'
-    )
-    infos = soup.find(
-        'div',
-        class_='product-info-details'
-    )
-
-    infos_produto = [
-        'Produto',
-        'Dimensão',
-        'Cor',
-        'Modelo',
-        'Marca',
-        'Garantia do Fabricante'
-        'teste',
-        'Tipo',
-        'Potencia',
-        'Tipo de Ar Condicionado']
-
-    return nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto
-
-
-def format_data(reais, centavos, ean_13, title):
-    # format_price__
-    preco = (reais + centavos)
-
-    # format_data__
-    product = {'LM': [int(ean_13)],
-               'Title': [str(title)],
-               'Price': [preco]}
-    produtos_csv = [ean_13, title, preco]
-
-    return product, produtos_csv, preco
-
-
-def ajusta_info(infos):
-    if infos is not None:
-        informacao = infos.find_next('td').text
-    else:
-        informacao = '---'
-
-    return print(informacao)
+from format_values import format_real, format_cents, format_data, format_info
+from search_data import find_price, data_get
 
 
 def main():
@@ -103,7 +39,7 @@ check_values(ean_13, nome_arquivo_csv, title, product, produtos_csv, nome_arquiv
 # save_data__
 
 
-dados = [ajusta_info(infos.find('th', string=dado)) for dado in infos_produto]
+dados = [format_info(infos.find('th', string=dado)) for dado in infos_produto]
 
 pw = 'mano34835965'
 db = 'db_leroy'

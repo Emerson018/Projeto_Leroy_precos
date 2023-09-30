@@ -38,3 +38,23 @@ def format_cents(text_lines):
                     break
 
     return cents_value
+
+def format_data(reais, centavos, ean_13, title):
+    # format_price__
+    preco = (reais + centavos)
+
+    # format_data__
+    product = {'LM': [int(ean_13)],
+               'Title': [str(title)],
+               'Price': [preco]}
+    produtos_csv = [ean_13, title, preco]
+
+    return product, produtos_csv, preco
+
+def format_info(infos):
+    if infos is not None:
+        informacao = infos.find_next('td').text
+    else:
+        informacao = '---'
+
+    return print(informacao)
