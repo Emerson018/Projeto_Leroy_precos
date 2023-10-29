@@ -46,7 +46,7 @@ def format_data(reais, centavos, ean_13, title):
     # format_data__
     product = {'LM': [int(ean_13)],
                'Title': [str(title)],
-               'Price': [preco]}
+               'Price': [float(preco)]}
     produtos_csv = [ean_13, title, preco]
 
     return product, produtos_csv, preco
