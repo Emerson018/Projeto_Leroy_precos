@@ -1,28 +1,26 @@
 import datetime
 import csv
 import os
+from io import StringIO
 
 def find_price(prod_price):
 
-    linhas_texto = ''
+    linhas_texto = []
     data_hora = datetime.datetime.now()
     nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
     # Write_archive__
-    with open(nome_arquivo, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(prod_price)
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerows(prod_price)
 
-    # Read_archive__
-    with open(nome_arquivo, 'r') as file:
-        reader = csv.reader(file)
+    buffer.seek(0)
+    reader = csv.reader(buffer)
 
-        for row in reader:
-            linhas_texto = linhas_texto + '.'.join(row) + '\n'
+    for row in reader:
+        linhas_texto.append('.'.join(row))
 
-    os.remove(nome_arquivo)
-
-    return linhas_texto
+    return '\n'.join(linhas_texto)
 
 def data_get(soup):
     ean_13 = ''
