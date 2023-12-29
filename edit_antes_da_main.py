@@ -20,15 +20,17 @@ def main():
 # Main__
 soup = main()
 # get_data__
-nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto = data_get(
+nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto, raiting, raiting_percent = data_get(
     soup)
 # find_price__
 linhas_texto = find_price(prod_price)
 # format_price__
+print(linhas_texto)
 reais = format_real(linhas_texto)
-centavos = format_cents(linhas_texto)
+print(f'===={reais}======')
+reais = float(reais)
 # format_data__
-product, produtos_csv, preco = format_data(reais, centavos, ean_13, title)
+product, produtos_csv, preco = format_data(reais, ean_13, title)
 # check_data__
 check_values(ean_13, nome_arquivo_csv, title, product, produtos_csv, nome_arquivo_csv, preco)
 # save_data__
@@ -51,8 +53,10 @@ INSERT INTO products (lm, title, price) VALUES
 connection = create_db_connection("localhost", "root", pw, db)
 execute_query(connection, informacoes_do_produto,dados_db)
 
-
-
+print(raiting)
+print(raiting_percent)
+print(type(reais))
+print(reais)
 # só nao ta encontrando valroes abaixo de 10 reais
 
 #O CÓDIGO FUNCIONA, MAS TEM Q COLOCAR O 'FROM IMPORT' DENTRO DA FUNÇÃO

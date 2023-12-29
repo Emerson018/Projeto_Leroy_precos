@@ -1,13 +1,9 @@
-import datetime
 import csv
-import os
 from io import StringIO
 
 def find_price(prod_price):
 
     linhas_texto = []
-    data_hora = datetime.datetime.now()
-    nome_arquivo = f"dados_{data_hora.strftime('%Y%m%d_%H%M%S')}.csv"
 
     # Write_archive__
     buffer = StringIO()
@@ -61,4 +57,7 @@ def data_get(soup):
         'Potencia',
         'Tipo de Ar Condicionado']
 
-    return nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto
+    raiting = soup.find('div', class_='bv_numReviews_text')
+    raiting_percent = soup.find('span', {'class': 'bv-secondary-rating-summary-rating bv-table-cell'})
+
+    return nome_arquivo_csv, title, prod_price, ean_13, infos, infos_produto, raiting, raiting_percent

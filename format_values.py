@@ -1,21 +1,13 @@
 import re
 
 def format_real(text_lines):
+    default = r"data-price='{\"integers\":\"([\d.]+)\",\"decimals\":\"([\d]+)\"}'"
+    matches = re.search(default, text_lines)
+    if matches:
+        integers, decimals = matches.groups()
+        price = f"{integers.replace('.','')}.{decimals}"
 
-    default = r"const integers = '([\d.]+)'"
-    values = []
-
-    for line in text_lines.split('\n'):
-        match = re.search(
-            default,
-            line
-        )
-        if match:
-            price = match.group()
-            values.append(price)
-
-    value = values[0].split("'")[1]
-    return value
+    return price
 
 def format_cents(text_lines):
     key_word = 'const'
@@ -39,9 +31,9 @@ def format_cents(text_lines):
 
     return cents_value
 
-def format_data(reais, centavos, ean_13, title):
+def format_data(reais, ean_13, title):
     # format_price__
-    preco = (reais + centavos)
+    preco = reais
 
     # format_data__
     product = {'LM': [int(ean_13)],
